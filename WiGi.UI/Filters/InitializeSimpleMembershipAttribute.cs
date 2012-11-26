@@ -8,6 +8,10 @@ using WiGi.UI.Models;
 
 namespace WiGi.UI.Filters
 {
+	using Data;
+	using Data.Account;
+	using Data.Wiki;
+
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 	public sealed class InitializeSimpleMembershipAttribute : ActionFilterAttribute
 	{
@@ -25,11 +29,11 @@ namespace WiGi.UI.Filters
 		{
 			public SimpleMembershipInitializer()
 			{
-				Database.SetInitializer<UsersContext>(null);
+				Database.SetInitializer<WiGiCtx>(null);
 
 				try
 				{
-					using (var context = new UsersContext())
+					using (var context = new WiGiCtx())
 					{
 						if (!context.Database.Exists())
 						{
@@ -38,7 +42,7 @@ namespace WiGi.UI.Filters
 						}
 					}
 
-					WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+					WebSecurity.InitializeDatabaseConnection("DefaultConnection", "Users", "Id", "Username", autoCreateTables: true);
 				}
 				catch (Exception ex)
 				{

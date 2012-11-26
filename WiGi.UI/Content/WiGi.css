@@ -1,0 +1,47 @@
+﻿.navbar .brand {
+	padding: 23px 20px 27px;
+}
+
+.nav-subnav, .navbar .nav-subnav > li {
+	font-size: 18px;
+}
+
+h2 {
+	border: 0;
+}
+
+legend {
+	margin-bottom: 0;
+}
+
+input[type=checkbox], input[type=radio] {
+	margin-top: 6px;
+}
+
+legend + .control-group {
+	margin-top: 0;
+}
+
+legend {
+	margin-bottom: 20px;
+}
+
+legend + .help-fieldset {
+	margin-top: -20px;
+}
+
+#next-steps section {
+	margin: 0 0 30px 20px;
+}
+
+#next-steps section p {
+	margin-left: 20px;
+}
+
+h1 {
+	text-transform: capitalize;
+}
+
+h4, h5, h6 {
+	text-transform: none;
+}

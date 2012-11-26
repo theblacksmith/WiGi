@@ -1,0 +1,21 @@
+@model PageViewModel
+
+@{
+    ViewBag.Title = @Model.Title;
+}
+
+<div class="row">
+    <hgroup class="title span12">
+        <h1>@Model.Title</h1>
+        <h2>@Model.About</h2>
+    </hgroup>
+
+	<article class="span9">
+		@Html.Raw(Model.Html)
+	</article>
+
+	<aside class="span3">
+		@{ Html.RenderPartial("Widgets/PageList", new PageListOptions()); }
+	</aside>
+    
+</div>

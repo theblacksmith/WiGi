@@ -23,7 +23,7 @@ namespace WiGi.UI
 			bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
 						"~/Scripts/modernizr-*"));
 
-			bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+			//bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
 			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
 						"~/Content/themes/base/jquery.ui.core.css",
@@ -38,6 +38,21 @@ namespace WiGi.UI
 						"~/Content/themes/base/jquery.ui.datepicker.css",
 						"~/Content/themes/base/jquery.ui.progressbar.css",
 						"~/Content/themes/base/jquery.ui.theme.css"));
+
+
+			// Add @Styles.Render("~/Content/bootstrap") in the <head/> of your _Layout.cshtml view
+			// Add @Scripts.Render("~/bundles/bootstrap") after jQuery in your _Layout.cshtml view
+			// When <compilation debug="true" />, MVC4 will render the full readable version. When set to <compilation debug="false" />, the minified version will be rendered automatically
+			BundleTable.Bundles.Add(
+				new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap*"));
+
+			BundleTable.Bundles.Add(new 
+				StyleBundle("~/Content/bootstrap")
+				.Include(
+					//"~/Content/bootstrap.css",
+				//"~/Content/bootstrap-responsive.css",
+					"~/Content/metro-bootstrap.css",
+					"~/Content/WiGi.css"));
 		}
 	}
 }

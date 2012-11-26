@@ -1,0 +1,14 @@
+@model DirectoryViewModel
+@{
+	ViewBag.Title = @Model.Name + " Directory Page List";
+}
+
+<div class="row">
+    <hgroup class="title span12">
+        <h1>@Model.Name Directory</h1>
+    </hgroup>
+
+	<article class="span9">
+		@{ Html.RenderPartial("Widgets/PageList", new PageListOptions(Model.DocId)); }
+	</article>
+</div>

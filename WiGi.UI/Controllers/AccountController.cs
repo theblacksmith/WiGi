@@ -1,22 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using DotNetOpenAuth.AspNet;
-using Microsoft.Web.WebPages.OAuth;
-using WebMatrix.WebData;
-using WiGi.UI.Filters;
-using WiGi.UI.Models;
-
-namespace WiGi.UI.Controllers
+﻿namespace WiGi.UI.Controllers
 {
+	using Account;
+	using Data;
+	using Services;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Transactions;
+	using System.Web.Mvc;
+	using System.Web.Security;
+	using DotNetOpenAuth.AspNet;
+	using Microsoft.Web.WebPages.OAuth;
+	using WebMatrix.WebData;
+	using Filters;
+	using Models;
+
 	[Authorize]
 	[InitializeSimpleMembership]
-	public class AccountController : Controller
+	public class AccountController : BaseController
 	{
+		private readonly ISettingsProvider _settingsProvider;
+
+		public AccountController(ISettingsProvider settingsProvider)
+		{
+			_settingsProvider =settingsProvider;
+		}
+
 		//
 		// GET: /Account/Login
 
@@ -24,6 +33,7 @@ namespace WiGi.UI.Controllers
 		public ActionResult Login(string returnUrl)
 		{
 			ViewBag.ReturnUrl = returnUrl;
+			
 			return View();
 		}
 
@@ -42,6 +52,7 @@ namespace WiGi.UI.Controllers
 
 			// If we got this far, something failed, redisplay form
 			ModelState.AddModelError("", "The user name or password provided is incorrect.");
+			
 			return View(model);
 		}
 
@@ -63,6 +74,9 @@ namespace WiGi.UI.Controllers
 		[AllowAnonymous]
 		public ActionResult Register()
 		{
+			if(!WG.Settings.AllowRegistration)
+				return HttpNotFound();
+
 			return View();
 		}
 
@@ -74,6 +88,9 @@ namespace WiGi.UI.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Register(RegisterModel model)
 		{
+			if(!WG.Settings.AllowRegistration)
+				return HttpNotFound();
+
 			if (ModelState.IsValid)
 			{
 				// Attempt to register the user
@@ -223,6 +240,9 @@ namespace WiGi.UI.Controllers
 				return RedirectToAction("ExternalLoginFailure");
 			}
 
+			if (!ProviderFilter.IsAllowed(result))
+				return View("ProviderNotAllowed");
+
 			if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
 			{
 				return RedirectToLocal(returnUrl);
@@ -263,14 +283,14 @@ namespace WiGi.UI.Controllers
 			if (ModelState.IsValid)
 			{
 				// Insert a new user into the database
-				using (UsersContext db = new UsersContext())
+				using (WiGiCtx db = new WiGiCtx())
 				{
-					UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+					User user = db.Users.FirstOrDefault(u => u.Username.ToLower() == model.UserName.ToLower());
 					// Check if user already exists
 					if (user == null)
 					{
 						// Insert name into the profile table
-						db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+						db.Users.Add(new User { Username = model.UserName });
 						db.SaveChanges();
 
 						OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);

@@ -1,0 +1,23 @@
+﻿@using WiGi.Wiki
+@model PageListOptions
+
+<section class="widget pagelist">
+	<h2>@Model.Title</h2>
+	<ul>
+		@if (Model.ShowDirectories)
+		{
+			foreach (var link in WG.ListDirectories(Model.Directory))
+			{
+				<li><a href="@Model.Directory/@link">@(new DocId(link).ToText())</a></li>
+			}
+		}
+		
+		@if (Model.ShowPages)
+		{
+			foreach (var docid in WG.ListPages(Model.Directory))
+			{
+				<li>@Html.Raw(docid.ToLink())</li>
+			}
+		}
+	</ul>
+</section>

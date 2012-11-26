@@ -3,10 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WiGi.Tests
 {
-	using System.Diagnostics;
 	using System.IO;
-	using Git;
-	using Git.Commands;
 
 	[TestClass]
 	public class GitTests
@@ -22,29 +19,20 @@ namespace WiGi.Tests
 				return _resourcesDir;
 			}
 		}
+
 		[TestMethod]
 		public void CanClone()
 		{
-			var git = new Git(ResourcesDir);
+			if(Directory.Exists(Path.Combine(ResourcesDir, "Clone")))
+				Directory.Delete(Path.Combine(ResourcesDir, "Clone"),true);
 
-			var cmd = new CloneCommand(Path.Combine(ResourcesDir, "RemoteRepo"));
-			cmd.Local = true;
-			cmd.Directory = "Clone";
-			var repo = git.Clone(cmd);
+			var cmd = new NGit.Api.CloneCommand();
+			cmd.SetURI(Path.Combine(ResourcesDir, "RemoteRepo"));
+			cmd.SetDirectory(Path.Combine(ResourcesDir, "Clone"));
+			
+			var git = cmd.Call();
 
-			Debug.Write(git.Output);
-
-			Assert.IsNotNull(repo);
-			Assert.IsTrue(repo.IsGitRepo);
-		}
-
-		[TestMethod]
-		public void CanParseConfig()
-		{
-			var conf = RepoConfig.Parse(Path.Combine(ResourcesDir,"sample-config"));
-
-			Assert.IsNotNull(conf);
-			Assert.IsFalse(conf.Bare);
+			Assert.IsNotNull(git.GetRepository());
 		}
 	}
 }

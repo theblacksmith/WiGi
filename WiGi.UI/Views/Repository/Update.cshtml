@@ -1,0 +1,132 @@
+﻿@using Mvc.Html.Bootstrap
+@model NGit.Api.PullResult
+
+@{
+	ViewBag.Title = "Update Result";
+}
+
+<h2>Update Result</h2>
+
+@if (Model.IsSuccessful())
+{
+	@Html.Alert(AlertType.Success, "WiGi wiki repository updated!");
+
+	var ftch = Model.GetFetchResult();
+	
+	<h3>Fetch Result</h3>
+	
+	@ftch.GetMessages()
+	
+	<ul>
+	@foreach(var r in ftch.GetTrackingRefUpdates())
+	{
+		<li>
+			Local Name: @r.GetLocalName() <br/> 
+			Remote Name: @r.GetRemoteName() <br/>
+			New Id: @r.GetNewObjectId() <br/>
+			Old Id: @r.GetOldObjectId() <br/>
+			Result: @r.GetResult().ToString()
+		</li>
+	}
+	</ul>
+	
+	
+	var mrg = Model.GetMergeResult();
+
+	if (mrg != null)
+	{
+		<h3>Merge Result</h3>
+
+		if (mrg.GetMergeStatus().IsSuccessful())
+		{
+			<span class="label label-success">Successful</span>
+		}
+		else
+		{
+			<span class="label label-important">Failed</span>
+		}
+
+		@(mrg.GetConflicts() != null ? mrg.GetConflicts().Count + " conflicts ocurred" : "No conflicts ocurred")
+	
+		var conflicts = mrg.GetFailingPaths();
+
+		if (conflicts != null)
+		{
+			@( conflicts.Count > 0 ? conflicts.Count + " conflicts ocurred" : "No conflicts ocurred")
+
+			<table class="conflicts">
+				<thead>
+					<tr>
+						<th>Key</th>
+						<th>Failure reason</th>
+					</tr>
+				</thead>
+				@foreach (var c in conflicts)
+				{
+					<tr>
+						<td>
+							@c.Key
+						</td>
+						<td>
+							@c.Value.ToString()
+						</td>
+					</tr>
+				}
+			</table>
+		}
+		
+		<br/><br/>
+		<pre>@mrg.ToString()</pre>
+	}
+	
+	var reb = Model.GetRebaseResult();
+
+	if (reb != null)
+	{
+		<h3>Rebase Result</h3>
+
+		if (reb.GetStatus().IsSuccessful())
+		{
+			<span class="label label-success">Successful</span>
+		}
+		else
+		{
+			<span class="label label-important">Failed</span>
+		}
+
+		var conflicts = reb.GetFailingPaths();
+
+		if (conflicts != null)
+		{
+			@( conflicts.Count > 0 ? conflicts.Count + " conflicts ocurred" : "No conflicts ocurred")
+
+			<table class="conflicts">
+				<thead>
+					<tr>
+						<th>Key</th>
+						<th>Failure reason</th>
+					</tr>
+				</thead>
+				@foreach (var c in conflicts)
+				{
+					<tr>
+						<td>
+							@c.Key
+						</td>
+						<td>
+							@c.Value.ToString()
+						</td>
+					</tr>
+				}
+			</table>
+		}
+		
+		<br/><br/>
+		<pre>@reb.ToString()</pre>
+	}
+
+}
+else
+{
+	@Html.Alert(AlertType.Error, "Something went wrong. :(");
+}

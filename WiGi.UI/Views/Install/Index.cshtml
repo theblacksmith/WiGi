@@ -1,0 +1,122 @@
+﻿@model WiGi.UI.Models.InstallModel
+
+@{
+	ViewBag.Title = "Index";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div class="page-header">
+	<h2>Installation</h2>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+	<fieldset>
+		<legend>Git Access</legend>
+		<div class="control-group">
+			@Html.LabelFor(model => model.WikiRepository)
+			<div class="controls">
+				@Html.TextBoxFor(model => model.WikiRepository, new { @class = "text-box single-line input-xxlarge" })
+				@Html.ValidationMessageFor(model => model.WikiRepository)
+			</div>
+		</div>
+		<div class="row">
+			<div class="control-group span3">
+				@Html.LabelFor(model => model.GitUser)
+				<div class="controls">
+					@Html.EditorFor(model => model.GitUser)
+					@Html.ValidationMessageFor(model => model.GitUser)
+				</div>
+			</div>
+			<div class="control-group span9">
+				@Html.LabelFor(model => model.GitPassword)
+				<div class="controls">
+					@Html.EditorFor(model => model.GitPassword)
+					@Html.ValidationMessageFor(model => model.GitPassword)
+				</div>
+			</div>
+			<div class="span12">
+				<div class="control-group">
+					<label class="radio">@Html.RadioButtonFor(m => m.UseSameGitAccountForAllUsers, true) Use this git account for all users</label>
+					<label class="radio">@Html.RadioButtonFor(m => m.UseSameGitAccountForAllUsers, false) Each user has this own git account (recommended)</label>
+					<span class="help-inline">
+						Choosing this option will require each user will to fill in his credentials when he registers.
+					</span>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Database Access</legend>
+		<p class="help-fieldset">The database is used for storing user's infos and page's metadata.</p>
+		
+		<div class="row">
+			<div class="control-group span6">
+				@Html.LabelFor(model => model.ConnectionString)
+				<div class="controls">
+					@Html.TextBoxFor(model => model.ConnectionString, new { @class = "text-box single-line input-xxlarge" })
+					@Html.ValidationMessageFor(model => model.ConnectionString)
+					<span class="help-inline">Need help? Go to <a href="http://www.connectionstrings.com">connectionstrings.com</a>.</span>
+				</div>
+			</div>
+			<div class="control-group span6">
+				@Html.LabelFor(model => model.DatabaseProvider)
+				<div class="controls">
+					@Html.EditorFor(model => model.DatabaseProvider)
+					@Html.ValidationMessageFor(model => model.DatabaseProvider)
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Administration</legend>
+		<div class="row">
+			<div class="control-group span3">
+				@Html.LabelFor(model => model.AdminUsername)
+				<div class="controls">
+					@Html.EditorFor(model => model.AdminUsername)
+					@Html.ValidationMessageFor(model => model.AdminUsername)
+				</div>
+			</div>
+			<div class="control-group span9">
+				@Html.LabelFor(model => model.AdminPassword)
+				<div class="controls">
+					@Html.EditorFor(model => model.AdminPassword)
+					@Html.ValidationMessageFor(model => model.AdminPassword)
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">@Html.EditorFor(model => model.AllowRegistration) Allow user registration</label>
+				<span class="help-inline">
+					<span class="label label-info">Heads up!</span> For now, this controls direct registration only!
+					If you enable any service like Google or Facebook users will be able to register.
+				</span>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Authentication Options</legend>
+		<div class="control-group">
+			<label class="checkbox">@Html.EditorFor(model => model.EnableGoogleLogin) Allow users to login using Google Accounts</label>
+		</div>	
+		<div class="control-group">
+			@Html.LabelFor(model => model.GoogleAppsDomain)
+			<div class="controls">
+				@Html.EditorFor(model => model.GoogleAppsDomain) 
+				@Html.ValidationMessageFor(model => model.GoogleAppsDomain)
+				<p class="help-block">
+					Set this field to your google apps domain if you want to ONLY allow users in your company to log in.
+				</p>
+			</div>
+		</div>
+	</fieldset>
+	<br/><br/>
+	<div class="row">
+		<input type="submit" class="btn btn-primary btn-large span3 pull-right" value="Install" />
+	</div>
+}
