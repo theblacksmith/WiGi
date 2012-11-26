@@ -29,7 +29,7 @@ A C# .Net MVC 4 Wiki which uses Git for storing file history.
 - Plugin API
 - Search
 
-## Though about helping?
+## Thought about helping?
 
 ### Please, do!
 
