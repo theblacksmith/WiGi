@@ -22,8 +22,8 @@
 				() => new RazorPageParser(), true);
 
 			var rconf = new TemplateServiceConfiguration();
-			rconf.BaseTemplateType = typeof(HtmlTemplateBase<>);
-			
+			rconf.BaseTemplateType = typeof(RazorEngine.Templating.HtmlTemplateBase<>);
+
 			rconf.Namespaces.Add("WiGi");
 			rconf.Namespaces.Add("WiGi.Account");
 			rconf.Namespaces.Add("WiGi.Wiki");
@@ -31,7 +31,8 @@
 			Razor.SetTemplateService(new TemplateService(rconf));
 		}
 
-		public bool SupportsMetaInfo {
+		public bool SupportsMetaInfo
+		{
 			get { return false; }
 		}
 
