@@ -22,7 +22,7 @@
 				() => new RazorPageParser(), true);
 
 			var rconf = new TemplateServiceConfiguration();
-			rconf.BaseTemplateType = typeof(RazorEngine.Templating.HtmlTemplateBase<>);
+			rconf.BaseTemplateType = typeof(TemplateBase<>);
 
 			rconf.Namespaces.Add("WiGi");
 			rconf.Namespaces.Add("WiGi.Account");
